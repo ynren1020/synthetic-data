@@ -3,3 +3,29 @@
 # https://synthpop.org.uk/resources.html
 # https://www.jstatsoft.org/article/view/v074i11
 
+There are two main reasons we might wish to evaluate the utility of synthetic data:
+1. To compare different synthesis methods for the same data set.
+2. To diagnose where the original and synthetic data distributions differ and thus tune the synthesis methods to improve the utility of the synthetic data.
+For both of these reasons we recommend the propensity mean squared error (pMSE) as a utility measure. for the first we advise fitting the propensity score model by a classification and regression tree (CART) model.
+The default printed output from all the utility functions therefore presents only the pMSE measure and its standardized ratio (S_pMSE). 
+
+What is pMSE?
+The pMSE quantifies the difference between the propensity scores (estimated probabilities of treatment assignment) calculated from the original data and those from the synthetic data.
+It’s based on the mean squared error (MSE) concept, which measures the average squared difference between two values.
+
+Why Use pMSE as a Utility Measure?
+General Utility: Data holders create synthetic versions of datasets when privacy concerns restrict access to the original records. The goal is to ensure that synthetic data have a distribution comparable to the original data (general utility).
+Specific Utility: Specific utility refers to the similarity of analysis results obtained from synthetic data and the original data.
+Adaptation: Researchers adapted the general pMSE to the specific case of synthetic data. When the correct synthesis model is used, they derive the distribution of pMSE for the synthetic data.
+Comparison: pMSE is compared with other utility measures like confidence interval overlap and standardized differences in summary statistics.
+Identifying Deficiencies: pMSE helps identify deficiencies in synthetic data, guiding improvements to the synthesis method 12.
+In summary, pMSE provides a way to evaluate the quality of synthetic data by assessing how well propensity scores match between the original and synthetic datasets.
+
+Briefly:
+1. To compare the overall utility of two methods of synthesizing the same original data, you should fit a propensity score model with an adaptive model such as CART and compare the pMSE measures, calculated by utility.gen(), for the two methods.
+2. To judge and improve the utility of a synthesis method:
+    - start by visualizing all the one-way tables with compare().
+    - Next visualize all two-way ratios with utility.tables().
+    - If all the standardized pMSE ratios are below 10, or better still below 3, it is probably not necessary to do anything more as the utility seems acceptable.
+    - At each of the steps above you should try to improve the utility by tuning the synthesis with stratification and/or by changing the default parameters of syn().
+
